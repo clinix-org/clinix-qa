@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "ask": [
+      "Bash(git commit *)", "Bash(git push *)", "Bash(git pull *)", "Bash(git merge *)",
+      "Bash(git rebase *)", "Bash(git tag *)", "Bash(git reset *)", "Bash(git clean *)",
+      "Bash(git branch -d *)", "Bash(git branch -D *)", "Bash(rm *)", "Bash(gh *)", "Bash(docker push *)"
+    ],
+    "deny": [
+      "Bash(git push --force *)", "Bash(git push -f *)",
+      "Read(./.env)", "Read(./.env.local)"
+    ]
+  }
+}

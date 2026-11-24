@@ -7,8 +7,8 @@ Idioma: conteúdo e respostas em português do Brasil. Nomes de arquivos, pastas
 1. **Nada sai da máquina local sem OK explícito**: commit, push, pull, merge, rebase, tag, PR, issue, release, upload, disparo de pipeline ou publicação. Um OK vale para uma única ação. Antes de pedir o OK, mostre o diff; todo commit e PR leva a identificação de IA de `knowledge/git-workflow.md`.
 2. **Nunca altere** `../clinix-backend` nem `../clinix-frontend`. São somente leitura. Defeito encontrado vira relatório, não correção. Exceção: infraestrutura (`Dockerfile`, Compose, Nginx, `.env.example`, `README.md`, `package.json`/lockfile), com OK a cada alteração; nunca `src/`.
 3. **Nunca execute ação destrutiva** (apagar arquivo, branch, volume ou banco; `reset --hard`; `clean`; `push --force`) sem OK explícito.
-4. **Nunca teste contra banco compartilhado, Neon ou produção.** Só localhost ou ambiente descartável da CI. O `.env.local` do backend contém alternativas de banco remoto comentadas: não o use.
-5. **Secrets**: não abra arquivos `.env` reais; só `.env.example`. Em qualquer saída, mascare como `********`.
+4. **Nunca teste contra banco compartilhado, Neon ou produção.** Só localhost ou ambiente descartável da CI. Antes de subir a API, confira que o `DB_URL` ativo no `.env.local` do backend é H2 ou `clinix-saude-postgres`. A opção 3 (remota) só a pedido explícito.
+5. **Secrets**: não abra arquivos `.env` reais; só `.env.example`. Exceção: `../clinix-backend/.env.local` pode ser lido e editado localmente; nunca versionar nem expor seus valores. Em qualquer saída, mascare como `********`.
 6. **Repositório público**: nada no diff, log, issue, trace ou documento pode expor secret, dado pessoal, URL interna ou falha de segurança explorável. **LGPD**: somente dados sintéticos. Nunca dados reais de pacientes, médicos ou colaboradores.
 7. **Nunca enfraqueça um teste para ficar verde** (remover asserção, `skip`, aumentar retry/timeout, aceitar dois status). Investigue e me consulte.
 8. Não adicione dependência, serviço ou ferramenta sem explicar o ganho e receber OK.

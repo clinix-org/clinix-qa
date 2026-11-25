@@ -1,6 +1,8 @@
 name: Regression
 
 on:
+  push:
+    branches: [develop]
   schedule:
     - cron: '0 6 * * *' # 03:00 em Brasília; só dispara a partir da main
   workflow_dispatch:
@@ -20,6 +22,29 @@ jobs:
     uses: ./.github/workflows/suite.yml
     with:
       database: postgres
+      card: true
       qa_ref: ${{ github.event_name == 'schedule' && 'develop' || github.ref }}
       backend_ref: ${{ inputs.backend_ref || 'develop' }}
       frontend_ref: ${{ inputs.frontend_ref || 'develop' }}
+
+  # Único job com escrita: não baixa nem executa código do projeto.
+  publish:
+    needs: regression
+    if: ${{ !cancelled() && (github.event_name == 'schedule' || github.ref == 'refs/heads/develop' && github.event_name == 'push') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with: { name: cartao, path: card }
+      - name: Publicar na branch results
+        working-directory: card
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          git init -q -b results
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add results.svg results.json
+          git commit -q -m 'chore(qa): publica resultados da regressão'
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" results:refs/heads/results

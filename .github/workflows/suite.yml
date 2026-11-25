@@ -10,6 +10,7 @@ on:
       backend_ref: { type: string, default: develop }
       frontend_ref: { type: string, default: develop }
       timeout: { type: number, default: 30 }
+      card: { type: boolean, default: false }
 
 permissions:
   contents: read
@@ -56,13 +57,29 @@ jobs:
         env: { DATABASE: '${{ inputs.database }}' }
         run: |
           {
-            node scripts/ci-summary.mjs
+            node scripts/results.mjs summary
             echo
             echo "Banco: $DATABASE"
             for repo in clinix-backend clinix-frontend clinix-qa; do
               echo "- $repo: \`$(git -C "../$repo" rev-parse --short HEAD)\`"
             done
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Gerar cartão de resultados
+        if: ${{ !cancelled() && inputs.card }}
+        env: { DATABASE: "${{ inputs.database == 'postgres' && 'PostgreSQL 18' || 'H2' }} · Chromium" }
+        run: |
+          BACKEND_SHA=$(git -C ../clinix-backend rev-parse --short HEAD) \
+          FRONTEND_SHA=$(git -C ../clinix-frontend rev-parse --short HEAD) \
+          QA_SHA=$(git rev-parse --short HEAD) \
+          node scripts/results.mjs card card
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() && inputs.card }}
+        with:
+          name: cartao
+          path: clinix-qa/card
+          retention-days: 7
 
       - name: Logs em falha
         if: failure()

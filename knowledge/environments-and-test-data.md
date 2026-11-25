@@ -5,15 +5,15 @@ Usar o Docker **do próprio projeto**. O QA não tem Compose nem container próp
 | Item | Valor |
 |---|---|
 | API | `http://localhost:8090` (8080 só dentro do container) |
-| Tela | `http://localhost:5173` (desenvolvimento) e `http://localhost:8081` (produção local, via Nginx) |
-| Containers | `clinix-saude-backend`, `clinix-saude-postgres`, `clinix-saude-frontend`, `clinix-saude-frontend-prod` |
+| Tela | `http://localhost:8091` (Docker, via Nginx) e `http://localhost:5173` (`npm run dev`, fora do Docker) |
+| Containers | `clinix-saude-backend`, `clinix-saude-postgres`, `clinix-saude-frontend` |
 | Quem sobe e para | o responsável ou o agente; nunca apagar volume sem OK |
 | H2 em memória | feedback rápido; dados somem ao reiniciar |
 | PostgreSQL em Docker | decisão de liberar; dados persistem no volume |
 
 - Se o PostgreSQL não estiver disponível, registrar no veredito que a execução foi só em H2.
 - Antes de executar: conferir que o `DB_URL` ativo é local; o responsável define `QA_LOCAL_DB_CONFIRMED=true`. O agente não altera essa variável.
-- Sequência: subir o backend e depois o frontend de produção, que usa a rede criada por ele.
+- Sequência: subir o backend e depois o frontend, que usa a rede criada por ele.
 - Registrar o SHA testado. `down -v` apaga dados: exige OK.
 - CI: ambiente descartável a partir dos `Dockerfile` do projeto; detalhes a decidir com a pipeline.
 

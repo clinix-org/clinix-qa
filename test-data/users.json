@@ -8,14 +8,14 @@
   },
   "user": {
     "nome": "QA User",
-    "usuario": "qa_user@clinix.com",
+    "usuario": "qa.user@clinix.com",
     "role": "USER",
     "ativo": true,
     "passwordEnv": "QA_USER_PASSWORD"
   },
   "inactive": {
     "nome": "QA Inativo",
-    "usuario": "qa_inativo@clinix.com",
+    "usuario": "qa.inativo@clinix.com",
     "role": "USER",
     "ativo": false,
     "passwordEnv": "QA_INACTIVE_PASSWORD"

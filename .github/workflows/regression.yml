@@ -1,0 +1,25 @@
+name: Regression
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # 03:00 em Brasília; só dispara a partir da main
+  workflow_dispatch:
+    inputs:
+      backend_ref: { description: Branch ou SHA do backend, default: develop }
+      frontend_ref: { description: Branch ou SHA do frontend, default: develop }
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regression-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    uses: ./.github/workflows/suite.yml
+    with:
+      database: postgres
+      qa_ref: ${{ github.event_name == 'schedule' && 'develop' || github.ref }}
+      backend_ref: ${{ inputs.backend_ref || 'develop' }}
+      frontend_ref: ${{ inputs.frontend_ref || 'develop' }}

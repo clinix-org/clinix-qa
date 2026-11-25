@@ -1,0 +1,79 @@
+# Reutilizável: sobe o Clinix descartável e executa a suíte.
+name: Suite
+
+on:
+  workflow_call:
+    inputs:
+      database: { type: string, required: true }
+      grep: { type: string, default: '.' }
+      qa_ref: { type: string, default: '' }
+      backend_ref: { type: string, default: develop }
+      frontend_ref: { type: string, default: develop }
+      timeout: { type: number, default: 30 }
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout }}
+    defaults:
+      run:
+        working-directory: clinix-qa
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { path: clinix-qa, ref: '${{ inputs.qa_ref }}', persist-credentials: false }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { repository: clinix-org/clinix-backend, ref: '${{ inputs.backend_ref }}', path: clinix-backend, persist-credentials: false }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { repository: clinix-org/clinix-frontend, ref: '${{ inputs.frontend_ref }}', path: clinix-frontend, persist-credentials: false }
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with: { node-version-file: clinix-qa/.nvmrc, cache: npm, cache-dependency-path: clinix-qa/package-lock.json }
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - name: Gerar credenciais descartáveis
+        env: { DATABASE: '${{ inputs.database }}' }
+        run: node scripts/ci-env.mjs "$DATABASE"
+
+      - name: Subir backend
+        working-directory: clinix-backend
+        env: { COMPOSE_PROFILES: "${{ inputs.database == 'postgres' && 'local-db' || '' }}" }
+        run: docker compose --env-file .env.local up -d --build --wait --wait-timeout 300
+
+      - name: Subir frontend
+        working-directory: clinix-frontend
+        run: docker compose up -d --build --wait --wait-timeout 120
+
+      - name: Executar testes
+        env: { GREP: '${{ inputs.grep }}' }
+        run: npx playwright test --grep "$GREP"
+
+      - name: Resumo
+        if: always()
+        env: { DATABASE: '${{ inputs.database }}' }
+        run: |
+          {
+            node scripts/ci-summary.mjs
+            echo
+            echo "Banco: $DATABASE"
+            for repo in clinix-backend clinix-frontend clinix-qa; do
+              echo "- $repo: \`$(git -C "../$repo" rev-parse --short HEAD)\`"
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Logs em falha
+        if: failure()
+        run: docker logs --tail 80 clinix-saude-backend || true
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: relatorio-${{ inputs.database }}
+          path: |
+            clinix-qa/playwright-report
+            clinix-qa/test-results
+          retention-days: 7
+          if-no-files-found: ignore

@@ -19,6 +19,40 @@
 
 `test(unit)` só se o repositório tiver testes unitários. Um propósito por commit; presente do indicativo, até 72 caracteres.
 
+## AI identification (obrigatória em todo trabalho feito com IA)
+Vale para os três repositórios. Usar o modelo **real** da sessão, nunca um valor copiado. Não usar em trabalho feito só por pessoas.
+
+| Onde | O que registrar |
+|---|---|
+| Branch | só `tipo/assunto`; o modelo não entra no nome |
+| Código | nada; o histórico do Git já identifica |
+| Commit | corpo curto (o quê e por quê) e trailers |
+| PR | bloco "Identificação" |
+
+Commit:
+```text
+<tipo>(<escopo>): <descrição em português>
+
+<o que mudou e por quê, até 3 linhas>
+
+Refs: SCRUM-xx            (somente se houver história)
+Co-Authored-By: <modelo> <noreply@anthropic.com>
+```
+PR:
+```text
+## Resumo
+<o que mudou e por quê>
+## Validação
+<comandos e resultado real; o que não foi testado>
+## Identificação
+- IA: <modelo> via Claude Code
+- História: SCRUM-xx ou nenhuma
+- [ ] Diff revisado por uma pessoa
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+```
+O agente nunca marca a caixa de revisão humana nem declara que houve revisão.
+
 ## Pre-commit checklist
 - [ ] Definition of Done do `CLAUDE.md`
 - [ ] `git status` e diff staged lidos por completo

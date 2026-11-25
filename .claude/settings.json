@@ -7,7 +7,13 @@
     ],
     "deny": [
       "Bash(git push --force *)", "Bash(git push -f *)",
-      "Read(./.env)", "Read(./.env.local)"
+      "Read(./.env)", "Read(./.env.local)",
+      "Bash(cat *.env)", "Bash(less *.env)", "Bash(more *.env)", "Bash(head *.env)",
+      "Bash(tail *.env)", "Bash(grep *.env)", "Bash(sed *.env)", "Bash(awk *.env)",
+      "Bash(strings *.env)", "Bash(cp *.env)", "Bash(source *.env)",
+      "Bash(cat *clinix-frontend/.env.local)", "Bash(less *clinix-frontend/.env.local)", "Bash(more *clinix-frontend/.env.local)", "Bash(head *clinix-frontend/.env.local)",
+      "Bash(tail *clinix-frontend/.env.local)", "Bash(grep *clinix-frontend/.env.local)", "Bash(sed *clinix-frontend/.env.local)", "Bash(awk *clinix-frontend/.env.local)",
+      "Bash(strings *clinix-frontend/.env.local)", "Bash(cp *clinix-frontend/.env.local)", "Bash(source *clinix-frontend/.env.local)"
     ]
   }
 }

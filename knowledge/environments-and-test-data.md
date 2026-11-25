@@ -38,3 +38,4 @@ Um único fluxo; não criar outros arquivos `.env`.
 - `tests/setup/users.setup.ts` cria e ajusta `user` e `inactive`; é idempotente nos dois bancos.
 - Estes três são somente leitura. Teste que altera usuário cria o próprio.
 - Massa nova recebida: converter para JSON sintético em `test-data/`. Se vier com senha ou dado real, parar e avisar.
+- Alvo padrão da suíte completa: containers com PostgreSQL e tela em 8091 (`BASE_URL=http://localhost:8091`); ao final, `@smoke` em H2.

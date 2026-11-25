@@ -18,3 +18,11 @@
 **Suspensão:** ambiente instável ou defeito que impede o fluxo principal.
 **Saída:** checklist executado, nenhum teste `@critical` falhando, nenhum defeito Alto aberto, riscos restantes declarados.
 **Defeitos:** Jira. **Histórico:** `test-runs/`. **Aprovação:** responsável pelo QA.
+
+## Estratégia de trabalho
+- Uma história por vez: critérios → checklist → API → UI → execução → veredito.
+- Regras e combinações na API; na UI, o que o usuário vê. k6 depois das histórias validadas.
+- Desenvolver e decidir em containers com PostgreSQL; ao final, `@smoke` em H2.
+- Teste novo passa 3 vezes e prova que consegue falhar (produto adulterado em cópia temporária).
+- Defeito mantém o teste vermelho, sem `skip`; o resultado esperado só muda com a história.
+- CI: `quality.yml` (PR, smoke em H2) e `regression.yml` (noturno, tudo em PostgreSQL).

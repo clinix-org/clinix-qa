@@ -4,7 +4,7 @@ import { env } from '../config/env.ts';
 
 const userSchema = z.object({
   nome: z.string().min(1),
-  usuario: z.string().regex(/^qa_[a-z0-9_]+@clinix\.com$/),
+  usuario: z.string().regex(/^qa\.[a-z0-9]+@clinix\.com$/),
   role: z.enum(['ADMIN', 'USER']),
   ativo: z.boolean(),
   passwordEnv: z.string().regex(/^QA_[A-Z_]+$/),

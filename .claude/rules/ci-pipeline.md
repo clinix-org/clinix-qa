@@ -6,7 +6,7 @@ paths:
 
 | Gatilho | Executa | Meta |
 |---|---|---|
-| PR em `clinix-qa` | lint, typecheck, gitleaks, `@smoke` (Chromium) | até 10 min |
+| PR em `clinix-qa` | lint, typecheck, catálogo em dia (`docs:check`), gitleaks, `@smoke` (Chromium) | até 10 min |
 | Push em `develop` e noturno | `@regression` API + UI, a11y | até 30 min |
 | Manual (`workflow_dispatch`, com refs) | suíte escolhida, Firefox/WebKit, k6, ZAP baseline | sob demanda |
 

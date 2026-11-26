@@ -12,6 +12,8 @@
     "test:api": "playwright test --project=api",
     "test:e2e": "playwright test --project=e2e",
     "report": "playwright show-report",
+    "docs:catalog": "node scripts/catalog.mjs",
+    "docs:check": "node scripts/catalog.mjs --check",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,mjs,json}\"",
     "format:check": "prettier --check \"**/*.{ts,mjs,json}\"",

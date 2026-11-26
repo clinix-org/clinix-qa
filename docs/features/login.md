@@ -19,5 +19,5 @@ Risco: Alto | Base: critérios da SCRUM-1 e respostas do responsável em 2026-11
 
 Fora do escopo: cadastro, recuperação de senha e auditoria (história); carga (k6, depois).
 Exploratório: não realizado.
-Riscos restantes / dúvidas: mensagem do usuário inativo; senha com mais de 6 caracteres na tela; tecla Enter; Firefox e WebKit.
+Riscos restantes / dúvidas: mensagem do usuário inativo (sugestão do QA, a confirmar: API 423 `ACCOUNT_LOCKED`; tela "Sua conta está inativa. Procure o administrador do sistema para reativá-la."); senha com mais de 6 caracteres na tela; tecla Enter; Firefox e WebKit.
 Veredito: BLOQUEADO — 2026-11-25, backend `a86f0b5`, frontend `53158c9`; ver `../test-runs/2026-11-25-scrum-1-login.md`

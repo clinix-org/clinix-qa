@@ -23,6 +23,8 @@ O catálogo lê o cabeçalho de cada script em `performance/` (pastas `lib/` sã
 - A identidade do caso é o título, como no código. IDs do Qase não entram no código nem nos títulos.
 - Execução: uma por registro em `test-runs/`, com o mesmo nome do arquivo e os SHAs testados; resultados copiados da execução real, nunca de leitura de código.
 - Toda escrita no Qase (casos, execuções, defeitos) é publicação: mostrar a lista e esperar OK. Um OK vale para um lote.
+- Limites do Free vistos em 2026-11-26: sem busca QQL (ler com `qase_get`); a API não liga defeito a resultado existente (citar os títulos dos testes no defeito); resultado individual não é relido sem o hash (o detalhe fica em `test-runs/`).
+- Exclusões no Qase e o acesso direto `qase_api` ficam bloqueados nas permissões do usuário do Claude Code.
 - Cópia local: após cada sincronização, exportar o projeto do Qase em JSON para `/mnt/NAS/qa/clinix/qase-backup/AAAA-MM-DD/`, fora do repositório (defeitos não vão para o repositório público).
 
 ## Writing pattern
@@ -54,6 +56,13 @@ Veredito: LIBERADO | BLOQUEADO — data, SHA backend, SHA frontend, link da exec
 `[x]` significa implementado e executado com sucesso no SHA registrado. Nunca marcar por leitura de código.
 
 ## Defect template
-Título (onde + o que + condição) · ambiente/SHA · passos mínimos · esperado e **fonte** · obtido · evidência mascarada · `requestId` · severidade · reprodutibilidade.
+Título (onde + o que + condição) · ambiente/SHA · passos mínimos · esperado e **fonte** · obtido · evidência mascarada · `requestId` · severidade · reprodutibilidade · sugestão de correção (quando cabível).
 Antes de reportar: reproduzir 2 vezes e separar produto, teste, ambiente e massa.
+
+**Sugestão de correção:** incluir sempre que for válida e plausível, em seção própria, marcada como "Sugestão do QA — a confirmar".
+- Válida: coerente com a história e o oráculo, sem criar regra nova de negócio, sem abrir risco (ex.: enumeração de usuários) e verificável pelo teste existente. Ex.: texto da mensagem ao usuário, código HTTP, validação ausente.
+- Descrever o comportamento esperado, não o código. Não citar classe ou linha do produto como se fosse a correção certa.
+- Inviável ou incerta (causa desconhecida, depende de decisão de produto, arquitetura): não sugerir; registrar só o que foi observado.
+- Falha de segurança: nenhuma sugestão em local público.
+- A sugestão não muda o resultado esperado dos testes; só a história confirmada muda. Sugestão aceita pelo responsável passa a ser base no checklist da funcionalidade.
 Defeito fechado exige reteste e regressão da área afetada.

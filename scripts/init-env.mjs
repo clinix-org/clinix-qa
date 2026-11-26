@@ -8,7 +8,7 @@ if (existsSync('.env')) {
   const pin = () => String(randomInt(100000, 1000000));
   const lines = [
     'BASE_URL=http://localhost:5173',
-    'API_URL=http://localhost:8080',
+    'API_URL=http://localhost:8090',
     'QA_LOCAL_DB_CONFIRMED=false',
     'QA_ADMIN_EMAIL=',
     'QA_ADMIN_PASSWORD=',

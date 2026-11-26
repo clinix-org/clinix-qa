@@ -1,8 +1,8 @@
 # Security, LGPD and test data
 
 - Banco local do projeto: H2 em memória ou PostgreSQL em Docker (ver `environments-and-test-data.md`). Antes de executar, confirmar que o alvo é localhost/rede do Compose; se não for, abortar.
-- Cada teste cria dados próprios com prefixo `qa_` e sufixo único; remove no teardown o que criou.
-- E-mails sintéticos `qa_<id>@clinix.com`: nunca enviar mensagem a eles. Nunca gerar CPF/CRM/telefone que possa ser de pessoa real.
+- Cada teste cria dados próprios com prefixo `qa.` e sufixo único; remove no teardown o que criou.
+- E-mails sintéticos `qa.<id>@clinix.com`: nunca enviar mensagem a eles. Nunca gerar CPF/CRM/telefone que possa ser de pessoa real.
 - Faker sempre com seed registrada. Relógio controlado quando a data importar.
 - O ADMIN vem do bootstrap do ambiente local; na CI, credencial gerada para a execução.
 - Trace, vídeo e log podem conter senha e token: mascarar headers e usar contas descartáveis.

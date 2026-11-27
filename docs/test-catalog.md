@@ -113,7 +113,7 @@
 | credenciais inválidas | deve exibir erro e permanecer no login quando a senha está incorreta | regressão | sim | [login.spec.ts:117](../tests/e2e/auth/login.spec.ts#L117) |
 | credenciais inválidas | deve exibir erro e permanecer no login quando o e-mail não está cadastrado | regressão | sim | [login.spec.ts:117](../tests/e2e/auth/login.spec.ts#L117) |
 | credenciais inválidas | deve exibir erro e permanecer no login quando o e-mail tem só o primeiro nome | regressão | sim | [login.spec.ts:117](../tests/e2e/auth/login.spec.ts#L117) |
-| usuário inativo | deve exibir mensagem e permanecer no login quando o usuário está inativo | regressão | sim | [login.spec.ts:136](../tests/e2e/auth/login.spec.ts#L136) |
+| usuário inativo | deve informar que a conta está inativa e permanecer no login quando o usuário está inativo | regressão | sim | [login.spec.ts:136](../tests/e2e/auth/login.spec.ts#L136) |
 
 ### Paginação de medicamentos — SCRUM-33
 

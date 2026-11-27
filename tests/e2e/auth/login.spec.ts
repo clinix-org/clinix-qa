@@ -133,7 +133,7 @@ test.describe(
   'Login › usuário inativo',
   { tag: ['@ui', '@regression', '@critical'], annotation: story },
   () => {
-    test('deve exibir mensagem e permanecer no login quando o usuário está inativo', async ({
+    test('deve informar que a conta está inativa e permanecer no login quando o usuário está inativo', async ({
       page,
       loginPage,
     }) => {
@@ -142,7 +142,10 @@ test.describe(
 
       await loginPage.signIn(inactive.usuario, inactive.senha);
 
-      await expect(loginPage.alert, 'a tela deve explicar a recusa').toBeVisible();
+      // O texto exato será definido pelo PO; a mensagem genérica de erro não explica a recusa.
+      await expect(loginPage.alert, 'a tela deve explicar que a conta está inativa').toContainText(
+        /inativ/i,
+      );
       await expect(page).toHaveURL(/\/login$/);
     });
   },

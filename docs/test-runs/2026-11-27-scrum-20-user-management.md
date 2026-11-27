@@ -36,6 +36,13 @@ Prova de falha: na primeira execução, cópias temporárias do backend (11 alte
 Qase: execuções 9 (API, 35/35) e 10 (UI, 16/17). O `qase_ci_report` voltou a responder sucesso sem gravar os resultados; foram gravados com `qase_result_record` e conferidos na releitura.
 Checklist: `../features/users.md` | Catálogo: `../test-catalog.md`
 Defeitos (Qase): CLINIX-7 aberto (major). CLINIX-5, 6, 8, 9 e 10 inválidos por decisão do responsável.
-Não testado e por quê: log do sistema (`system_logs`), sem tela ou API para ler (decisão pendente); cores do status (checagem visual manual); UI em H2 (a tela 8091 usa o backend do container); exploratório; Firefox/WebKit; carga (k6, só a pedido)
-Riscos restantes: histórias desatualizadas em relação às decisões; regra do log sem verificação ponta a ponta; e-mail de usuário excluído permanece no texto do log (LGPD, para o PO avaliar); autodesativação do ADMIN sem regra escrita
+Não testado e por quê: cores do status (checagem visual manual); UI em H2 (a tela 8091 usa o backend do container); exploratório; Firefox/WebKit; carga (k6, só a pedido)
+Riscos restantes: histórias desatualizadas em relação às decisões; teste do log só roda com PostgreSQL; e-mail de usuário excluído permanece no texto do log (LGPD, para o PO avaliar); autodesativação do ADMIN sem regra escrita
 Evidência: execução local, `BASE_URL=http://localhost:8091 npx playwright test` (3 vezes em cada etapa) e `API_URL=<API em H2> npx playwright test --project=api`
+
+## Log do sistema (inclusão após a decisão do responsável, opção A)
+| Tipo | Executados | Passou | Falhou | Não executado |
+|---|---|---|---|---|
+| API + banco — log de edição e exclusão (PostgreSQL) | 2 | 2 | 0 | 0 |
+
+Os 2 testes leem `system_logs` com `SELECT` no container `clinix-saude-postgres`; passaram 3 vezes seguidas. Prova de falha em cópia do backend (sem log, responsável fixo, relógio errado): cada alteração reprovou a verificação correspondente. Branch `test/user-audit-log`. Qase: casos 133 e 134, execução 11 (2/2).

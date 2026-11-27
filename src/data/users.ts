@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { z } from 'zod';
 import { env } from '../config/env.ts';
@@ -26,4 +27,26 @@ export function getUser(key: UserKey) {
   const { usuarioEnv, ...rest } = { usuarioEnv: undefined, ...user };
   const usuario = 'usuario' in rest ? rest.usuario : env.required(String(usuarioEnv));
   return { ...rest, usuario, senha: env.required(passwordEnv) };
+}
+
+export type NewUserPayload = {
+  nome: string;
+  usuario: string;
+  senha: string;
+  role: 'ADMIN' | 'USER';
+};
+
+/**
+ * Usuário sintético e válido, com nome e e-mail únicos por chamada: os testes rodam
+ * em paralelo e no PostgreSQL já populado sem colidir na regra de e-mail único.
+ */
+export function newUser(overrides: Partial<NewUserPayload> = {}): NewUserPayload {
+  const id = randomUUID().replaceAll('-', '').slice(0, 10);
+  return {
+    nome: `QA Usuario ${id}`,
+    usuario: `qa.tmp${id}@clinix.com`,
+    senha: '246810',
+    role: 'USER',
+    ...overrides,
+  };
 }

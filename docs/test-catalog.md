@@ -5,10 +5,10 @@
 
 | Tipo | Casos | Smoke (PR) | Críticos |
 |---|---|---|---|
-| API | 49 | 5 | 13 |
-| Interface web (UI) | 31 | 6 | 9 |
+| API | 84 | 10 | 35 |
+| Interface web (UI) | 48 | 8 | 18 |
 | Desempenho (k6) | 0 | 0 | 0 |
-| **Total** | **80** | **11** | **22** |
+| **Total** | **132** | **18** | **53** |
 
 ## API
 
@@ -37,6 +37,56 @@
 | mesmo nome com outra dosagem ou unidade | deve cadastrar quando o nome é igual e muda a dosagem | regressão |  | [create-medication.spec.ts:263](../tests/api/medications/create-medication.spec.ts#L263) |
 | mesmo nome com outra dosagem ou unidade | deve cadastrar quando o nome é igual e muda a unidade | regressão |  | [create-medication.spec.ts:263](../tests/api/medications/create-medication.spec.ts#L263) |
 | lista principal | deve aparecer na listagem quando o cadastro é concluído | regressão |  | [create-medication.spec.ts:289](../tests/api/medications/create-medication.spec.ts#L289) |
+
+### Cadastro de usuários — SCRUM-15
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| cadastro válido | deve retornar 201 sem senha, ativo, com responsável e data/hora quando o ADMIN cadastra um Colaborador | smoke + regressão | sim | [create-user.spec.ts:20](../tests/api/users/create-user.spec.ts#L20) |
+| cadastro válido | deve retornar 201 sem senha, ativo, com responsável e data/hora quando o ADMIN cadastra um Administrador | smoke + regressão | sim | [create-user.spec.ts:20](../tests/api/users/create-user.spec.ts#L20) |
+| cadastro válido | deve autenticar com a senha cadastrada quando o usuário acabou de ser criado | smoke + regressão | sim | [create-user.spec.ts:59](../tests/api/users/create-user.spec.ts#L59) |
+| campos obrigatórios | deve recusar e indicar o campo quando falta o nome | regressão |  | [create-user.spec.ts:91](../tests/api/users/create-user.spec.ts#L91) |
+| campos obrigatórios | deve recusar e indicar o campo quando falta o e-mail | regressão |  | [create-user.spec.ts:91](../tests/api/users/create-user.spec.ts#L91) |
+| campos obrigatórios | deve recusar e indicar o campo quando falta a senha | regressão |  | [create-user.spec.ts:91](../tests/api/users/create-user.spec.ts#L91) |
+| campos obrigatórios | deve recusar e indicar o campo quando falta o perfil | regressão |  | [create-user.spec.ts:91](../tests/api/users/create-user.spec.ts#L91) |
+| e-mail corporativo | deve recusar quando o e-mail não pertence ao domínio @clinix.com | regressão |  | [create-user.spec.ts:111](../tests/api/users/create-user.spec.ts#L111) |
+| e-mail corporativo | deve recusar quando o e-mail não tem formato válido | regressão |  | [create-user.spec.ts:126](../tests/api/users/create-user.spec.ts#L126) |
+| senha de 6 dígitos | deve recusar quando a senha tem 5 dígitos | regressão |  | [create-user.spec.ts:154](../tests/api/users/create-user.spec.ts#L154) |
+| senha de 6 dígitos | deve recusar quando a senha tem 7 dígitos | regressão |  | [create-user.spec.ts:154](../tests/api/users/create-user.spec.ts#L154) |
+| senha de 6 dígitos | deve recusar quando a senha tem letra | regressão |  | [create-user.spec.ts:154](../tests/api/users/create-user.spec.ts#L154) |
+| e-mail único | deve retornar 409 com mensagem e manter um só cadastro quando o e-mail já existe (idêntico) | regressão | sim | [create-user.spec.ts:181](../tests/api/users/create-user.spec.ts#L181) |
+| e-mail único | deve retornar 409 com mensagem e manter um só cadastro quando o e-mail já existe (com letras maiúsculas) | regressão | sim | [create-user.spec.ts:181](../tests/api/users/create-user.spec.ts#L181) |
+| acesso administrativo | deve recusar sem cadastrar quando o USER tenta cadastrar | regressão | sim | [create-user.spec.ts:205](../tests/api/users/create-user.spec.ts#L205) |
+| acesso administrativo | deve recusar sem cadastrar quando não há token | regressão | sim | [create-user.spec.ts:217](../tests/api/users/create-user.spec.ts#L217) |
+
+### Gestão de usuários — SCRUM-14
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| listagem | deve listar administradores, colaboradores, ativos e inativos sem expor a senha quando o ADMIN consulta | smoke + regressão | sim | [list-users.spec.ts:15](../tests/api/users/list-users.spec.ts#L15) |
+| busca sem resultado | deve retornar 200 e lista vazia quando nenhum usuário corresponde à busca | regressão |  | [list-users.spec.ts:71](../tests/api/users/list-users.spec.ts#L71) |
+| acesso à listagem | deve recusar com 403 quando o USER consulta a lista de usuários | regressão | sim | [list-users.spec.ts:90](../tests/api/users/list-users.spec.ts#L90) |
+| acesso à listagem | deve recusar com 401 quando a lista de usuários é consultada sem token | regressão | sim | [list-users.spec.ts:100](../tests/api/users/list-users.spec.ts#L100) |
+
+### Gestão de usuários — SCRUM-16
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| exclusão | deve remover o registro quando o ADMIN exclui um usuário | regressão | sim | [delete-user.spec.ts:13](../tests/api/users/delete-user.spec.ts#L13) |
+| exclusão | deve recusar sem excluir quando o ADMIN tenta excluir a si mesmo | regressão | sim | [delete-user.spec.ts:31](../tests/api/users/delete-user.spec.ts#L31) |
+| exclusão | deve retornar 404 quando o usuário excluído não existe | regressão | sim | [delete-user.spec.ts:52](../tests/api/users/delete-user.spec.ts#L52) |
+| acesso à exclusão | deve recusar com 403 sem excluir quando o USER tenta excluir | regressão | sim | [delete-user.spec.ts:84](../tests/api/users/delete-user.spec.ts#L84) |
+| acesso à exclusão | deve recusar com 401 sem excluir quando não há token | regressão | sim | [delete-user.spec.ts:84](../tests/api/users/delete-user.spec.ts#L84) |
+| pesquisa | deve encontrar somente o usuário correspondente quando a busca usa parte do nome | regressão |  | [list-users.spec.ts:48](../tests/api/users/list-users.spec.ts#L48) |
+| pesquisa | deve encontrar somente o usuário correspondente quando a busca usa parte do e-mail | regressão |  | [list-users.spec.ts:48](../tests/api/users/list-users.spec.ts#L48) |
+| pesquisa | deve encontrar somente o usuário correspondente quando a busca usa o nome em maiúsculas | regressão |  | [list-users.spec.ts:48](../tests/api/users/list-users.spec.ts#L48) |
+| edição | deve gravar nome, perfil e status com responsável e data/hora quando o ADMIN edita o usuário | smoke + regressão | sim | [update-user.spec.ts:23](../tests/api/users/update-user.spec.ts#L23) |
+| edição | deve recusar com 409 sem alterar quando o novo e-mail pertence a outro usuário | regressão | sim | [update-user.spec.ts:48](../tests/api/users/update-user.spec.ts#L48) |
+| edição | deve retornar 404 quando o usuário editado não existe | regressão | sim | [update-user.spec.ts:72](../tests/api/users/update-user.spec.ts#L72) |
+| usuário inativo | deve recusar com 401 o token já emitido quando o ADMIN torna o usuário inativo | regressão | sim | [update-user.spec.ts:94](../tests/api/users/update-user.spec.ts#L94) |
+| usuário inativo | deve recusar sem alterar quando o ADMIN tenta tornar a si mesmo inativo | regressão | sim | [update-user.spec.ts:113](../tests/api/users/update-user.spec.ts#L113) |
+| acesso à edição | deve recusar com 403 sem alterar quando o USER tenta editar | regressão | sim | [update-user.spec.ts:155](../tests/api/users/update-user.spec.ts#L155) |
+| acesso à edição | deve recusar com 401 sem alterar quando não há token | regressão | sim | [update-user.spec.ts:155](../tests/api/users/update-user.spec.ts#L155) |
 
 ### Login — SCRUM-1
 
@@ -94,6 +144,38 @@
 | formulário | deve alertar e não enviar quando a dosagem é zero | regressão |  | [create-medication.spec.ts:90](../tests/e2e/medications/create-medication.spec.ts#L90) |
 | salvar | deve exibir sucesso e mostrar o medicamento na lista quando todos os campos são válidos | smoke + regressão | sim | [create-medication.spec.ts:121](../tests/e2e/medications/create-medication.spec.ts#L121) |
 | salvar | deve exibir "Medicamento já cadastrado." quando o medicamento já existe | regressão | sim | [create-medication.spec.ts:145](../tests/e2e/medications/create-medication.spec.ts#L145) |
+
+### Cadastro de usuários — SCRUM-15
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| formulário | deve apresentar Nome, E-mail, Senha, Confirmação de senha e Perfil obrigatórios quando o formulário abre | regressão |  | [create-user.spec.ts:16](../tests/e2e/users/create-user.spec.ts#L16) |
+| formulário | deve oferecer os perfis User e Administrador quando o formulário abre | regressão |  | [create-user.spec.ts:31](../tests/e2e/users/create-user.spec.ts#L31) |
+| formulário | deve exibir sucesso e mostrar o usuário na lista quando o ADMIN preenche dados válidos | smoke + regressão | sim | [create-user.spec.ts:40](../tests/e2e/users/create-user.spec.ts#L40) |
+| formulário | deve alertar e não enviar quando um campo obrigatório está vazio | regressão |  | [create-user.spec.ts:58](../tests/e2e/users/create-user.spec.ts#L58) |
+| formulário | deve exibir "As senhas precisam ser iguais." e não enviar quando a confirmação é diferente | regressão |  | [create-user.spec.ts:76](../tests/e2e/users/create-user.spec.ts#L76) |
+| formulário | deve informar que o e-mail já está cadastrado quando o ADMIN usa um e-mail existente | regressão | sim | [create-user.spec.ts:91](../tests/e2e/users/create-user.spec.ts#L91) |
+
+### Gestão de usuários — SCRUM-14
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| acesso pelo dashboard | deve abrir a lista de usuários quando o ADMIN clica em "Usuários" no menu do dashboard | regressão | sim | [list-users.spec.ts:11](../tests/e2e/users/list-users.spec.ts#L11) |
+| acesso pelo dashboard | não deve exibir o módulo Usuários quando o USER abre o dashboard | regressão | sim | [list-users.spec.ts:27](../tests/e2e/users/list-users.spec.ts#L27) |
+| acesso pelo dashboard | deve exibir acesso negado quando o USER abre /usuarios pelo endereço | regressão | sim | [list-users.spec.ts:43](../tests/e2e/users/list-users.spec.ts#L43) |
+| lista | deve exibir usuário, e-mail, acesso, status e os ícones de editar e excluir quando o ADMIN abre a lista | smoke + regressão | sim | [list-users.spec.ts:62](../tests/e2e/users/list-users.spec.ts#L62) |
+| pesquisa na tela | deve exibir "Nenhum usuário encontrado." quando a busca não encontra usuários | regressão |  | [list-users.spec.ts:105](../tests/e2e/users/list-users.spec.ts#L105) |
+
+### Gestão de usuários — SCRUM-16
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| pesquisa na tela | deve mostrar somente o usuário correspondente quando o ADMIN pesquisa por parte do e-mail | regressão |  | [list-users.spec.ts:90](../tests/e2e/users/list-users.spec.ts#L90) |
+| pesquisa na tela | deve impedir que o ADMIN exclua a si mesmo quando abre a própria linha | regressão |  | [list-users.spec.ts:117](../tests/e2e/users/list-users.spec.ts#L117) |
+| edição na tela | deve abrir a edição com nome, e-mail, perfil e status do usuário quando o ADMIN clica no lápis | regressão |  | [manage-users.spec.ts:11](../tests/e2e/users/manage-users.spec.ts#L11) |
+| edição na tela | deve atualizar a lista quando o ADMIN salva nome e status alterados | regressão | sim | [manage-users.spec.ts:29](../tests/e2e/users/manage-users.spec.ts#L29) |
+| exclusão na tela | deve pedir confirmação e manter o usuário quando o ADMIN cancela a exclusão | regressão | sim | [manage-users.spec.ts:61](../tests/e2e/users/manage-users.spec.ts#L61) |
+| exclusão na tela | deve remover o usuário da lista quando o ADMIN confirma a exclusão | regressão | sim | [manage-users.spec.ts:83](../tests/e2e/users/manage-users.spec.ts#L83) |
 
 ### Login — SCRUM-1
 

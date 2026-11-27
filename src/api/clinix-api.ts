@@ -55,6 +55,29 @@ export class ClinixApi {
     }
   }
 
+  createUser(token: string | null, data: unknown) {
+    return this.request.post('/users', { headers: auth(token), data });
+  }
+
+  listUsers(token: string | null, search?: string) {
+    return this.request.get('/users', {
+      headers: auth(token),
+      params: search === undefined ? undefined : { search },
+    });
+  }
+
+  getUserById(token: string | null, id: number) {
+    return this.request.get(`/users/${id}`, { headers: auth(token) });
+  }
+
+  updateUser(token: string | null, id: number, data: unknown) {
+    return this.request.put(`/users/${id}`, { headers: auth(token), data });
+  }
+
+  deleteUser(token: string | null, id: number) {
+    return this.request.delete(`/users/${id}`, { headers: auth(token) });
+  }
+
   /** Idempotente: funciona no H2 vazio e no PostgreSQL já populado. */
   async ensureUser(token: string, user: UserPayload): Promise<void> {
     const headers = { Authorization: `Bearer ${token}` };

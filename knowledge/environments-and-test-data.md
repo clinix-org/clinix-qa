@@ -5,8 +5,8 @@ Usar o Docker **do próprio projeto**. O QA não tem Compose nem container próp
 | Item | Valor |
 |---|---|
 | API | `http://localhost:8090` (8080 só dentro do container) |
-| Tela | `http://localhost:8091` (Docker, via Nginx) e `http://localhost:5173` (`npm run dev`, fora do Docker) |
-| Containers | `clinix-saude-backend`, `clinix-saude-postgres`, `clinix-saude-frontend` |
+| Tela | `http://localhost:8091` (Docker, via Nginx, versão de produção) e `http://localhost:5173` (Vite com hot reload: `npm run dev` fora do Docker ou o serviço opcional `frontend-dev`; nunca os dois juntos) |
+| Containers | `clinix-saude-backend`, `clinix-saude-postgres`, `clinix-saude-frontend`; opcional, só para programar: `frontend-dev` (perfil `development`, sobe só com `docker compose up -d --build frontend-dev`; nunca no servidor). Hoje sem `container_name`: o Compose gera `clinix-saude-frontend-frontend-dev-1` (padrão proposto: `clinix-saude-frontend-dev`). |
 | Quem sobe e para | o responsável ou o agente; nunca apagar volume sem OK |
 | H2 em memória | feedback rápido; dados somem ao reiniciar |
 | PostgreSQL em Docker | decisão de liberar; dados persistem no volume |
@@ -38,4 +38,5 @@ Um único fluxo; não criar outros arquivos `.env`.
 - `tests/setup/users.setup.ts` cria e ajusta `user` e `inactive`; é idempotente nos dois bancos.
 - Estes três são somente leitura. Teste que altera usuário cria o próprio.
 - Massa nova recebida: converter para JSON sintético em `test-data/`. Se vier com senha ou dado real, parar e avisar.
-- Alvo padrão da suíte completa: containers com PostgreSQL e tela em 8091 (`BASE_URL=http://localhost:8091`); ao final, `@smoke` em H2.
+- Alvo padrão da suíte completa: containers com PostgreSQL e tela em 8091 (`BASE_URL=http://localhost:8091`); ao final, `@smoke` em H2. Se o `.env` apontar `BASE_URL` para a 5173 e o Vite não estiver no ar, a UI falha com conexão recusada (problema de ambiente, não do produto).
+- Massa de medicamentos: nome único por teste (`QA Medicamento <8 hex>`), removida pela fixture `medications` ao final, mesmo em falha. Na UI, a sessão vem da API (`signInAs`).

@@ -85,17 +85,20 @@ test.describe(
   'Login › usuário inativo',
   { tag: ['@api', '@regression', '@critical'], annotation: story },
   () => {
-    test('deve recusar com conta inativa e sem token quando o usuário está inativo', async ({
-      api,
-    }) => {
-      const inactive = getUser('inactive');
+    test(
+      'deve recusar com conta inativa e sem token quando o usuário está inativo',
+      // Defeito aberto: o cartão do README mostra a falha como conhecida. Remover ao corrigir.
+      { annotation: { type: 'defect', description: 'Qase CLINIX-1' } },
+      async ({ api }) => {
+        const inactive = getUser('inactive');
 
-      const response = await api.login(inactive.usuario, inactive.senha);
+        const response = await api.login(inactive.usuario, inactive.senha);
 
-      expect(response.status(), 'conta inativa não é erro interno do servidor').toBe(423);
-      const body: unknown = await response.json();
-      expect(apiErrorSchema.parse(body).code).toBe('ACCOUNT_LOCKED');
-      expect(body).not.toHaveProperty('token');
-    });
+        expect(response.status(), 'conta inativa não é erro interno do servidor').toBe(423);
+        const body: unknown = await response.json();
+        expect(apiErrorSchema.parse(body).code).toBe('ACCOUNT_LOCKED');
+        expect(body).not.toHaveProperty('token');
+      },
+    );
   },
 );

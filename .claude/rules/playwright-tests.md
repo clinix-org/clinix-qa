@@ -29,6 +29,7 @@ paths:
 ## Tags
 Nível: `@api` ou `@ui`. Suíte: `@smoke` ou `@regression`. Opcionais: `@critical`, `@contract`, `@security`, `@a11y`.
 Todo teste tem `annotation` `{ type: 'story', description: 'SCRUM-xx' }` (no `describe` quando vale para o grupo) ou `type: 'feature'`. `@exploratory` só em automação de apoio.
+Teste que falha por defeito aberto recebe `annotation` `{ type: 'defect', description: 'Qase CLINIX-n' }` no próprio teste: o cartão do README mostra a falha como conhecida, e sem a marcação ela aparece como **NOVA**. Marcar só depois de registrar o defeito; remover ao confirmar a correção (o resumo da regressão lista marcados que passaram). A marcação nunca substitui a asserção nem esconde a falha.
 
 ## Flaky
 Retry na CI: no máximo 1, para coletar trace; passou no retry = flaky = defeito a investigar. Quarentena exige OK, motivo, dono e prazo.

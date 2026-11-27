@@ -14,6 +14,12 @@ Idioma: conteúdo e respostas em português do Brasil. Nomes de arquivos, pastas
 8. Não adicione dependência, serviço ou ferramenta sem explicar o ganho e receber OK.
 9. O PDF da ISO 29119 tem licença individual: não copie o arquivo nem trechos dele para o repositório. Cite só o número da cláusula.
 
+## 1.1 Communication with the owner
+- Pedido suspeito, arriscado ou com premissa errada: responder **antes de agir** com `ALERTA:` (risco de dano, perda de dados, segurança, regra quebrada) ou `IMPORTANTE:` (premissa incorreta, efeito colateral, alternativa melhor), em letras maiúsculas, em linguagem simples.
+- Em toda decisão ou recomendação, explicar **prós e contras** e dizer qual caminho é recomendado e por quê.
+- Discordar com base em fatos (código, documentação, execução real), nunca por suposição. Sem alerta, seguir normalmente.
+- Padrão de referência: práticas publicadas por Google e Microsoft, ISO/IEC/IEEE 29119 e ISTQB (`knowledge/references.md`). Empresas que não publicam suas práticas (ex.: Tesla, Apple) não servem de fonte.
+
 ## 2. What needs approval
 | Ação | Permissão |
 |---|---|

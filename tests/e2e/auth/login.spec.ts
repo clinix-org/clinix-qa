@@ -133,20 +133,23 @@ test.describe(
   'Login › usuário inativo',
   { tag: ['@ui', '@regression', '@critical'], annotation: story },
   () => {
-    test('deve informar que a conta está inativa e permanecer no login quando o usuário está inativo', async ({
-      page,
-      loginPage,
-    }) => {
-      const inactive = getUser('inactive');
-      await loginPage.open();
+    test(
+      'deve informar que a conta está inativa e permanecer no login quando o usuário está inativo',
+      // Defeito aberto: o cartão do README mostra a falha como conhecida. Remover ao corrigir.
+      { annotation: { type: 'defect', description: 'Qase CLINIX-1' } },
+      async ({ page, loginPage }) => {
+        const inactive = getUser('inactive');
+        await loginPage.open();
 
-      await loginPage.signIn(inactive.usuario, inactive.senha);
+        await loginPage.signIn(inactive.usuario, inactive.senha);
 
-      // O texto exato será definido pelo PO; a mensagem genérica de erro não explica a recusa.
-      await expect(loginPage.alert, 'a tela deve explicar que a conta está inativa').toContainText(
-        /inativ/i,
-      );
-      await expect(page).toHaveURL(/\/login$/);
-    });
+        // O texto exato será definido pelo PO; a mensagem genérica de erro não explica a recusa.
+        await expect(
+          loginPage.alert,
+          'a tela deve explicar que a conta está inativa',
+        ).toContainText(/inativ/i);
+        await expect(page).toHaveURL(/\/login$/);
+      },
+    );
   },
 );

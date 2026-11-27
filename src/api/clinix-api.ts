@@ -9,6 +9,9 @@ export type UserPayload = {
 };
 type UserRecord = Omit<UserPayload, 'senha'> & { id: number };
 
+const auth = (token: string | null): Record<string, string> =>
+  token ? { Authorization: `Bearer ${token}` } : {};
+
 /** Cliente fino: devolve a resposta crua; asserções ficam nos testes. */
 export class ClinixApi {
   constructor(private readonly request: APIRequestContext) {}
@@ -21,6 +24,58 @@ export class ClinixApi {
     const response = await this.login(username, password);
     if (!response.ok()) throw new Error(`Login de preparação falhou: HTTP ${response.status()}`);
     return ((await response.json()) as { token: string }).token;
+  }
+
+  createMedication(token: string | null, data: unknown) {
+    return this.request.post('/medications', { headers: auth(token), data });
+  }
+
+  getMedication(token: string, id: number) {
+    return this.request.get(`/medications/${id}`, { headers: auth(token) });
+  }
+
+  listMedications(token: string, search: string) {
+    return this.request.get('/medications', { headers: auth(token), params: { search } });
+  }
+
+  /** GET /medications com qualquer combinação de parâmetros de busca, página e ordenação. */
+  listMedicationPage(token: string | null, params: Record<string, string | number> = {}) {
+    return this.request.get('/medications', { headers: auth(token), params });
+  }
+
+  medicationOptions(token: string) {
+    return this.request.get('/medications/options', { headers: auth(token) });
+  }
+
+  /** Limpeza de massa; usado pela fixture, não é comportamento testado (sem história). */
+  async deleteMedication(token: string, id: number): Promise<void> {
+    const response = await this.request.delete(`/medications/${id}`, { headers: auth(token) });
+    if (![204, 404].includes(response.status())) {
+      throw new Error(`Limpeza do medicamento ${id} falhou: HTTP ${response.status()}`);
+    }
+  }
+
+  createUser(token: string | null, data: unknown) {
+    return this.request.post('/users', { headers: auth(token), data });
+  }
+
+  listUsers(token: string | null, search?: string) {
+    return this.request.get('/users', {
+      headers: auth(token),
+      params: search === undefined ? undefined : { search },
+    });
+  }
+
+  getUserById(token: string | null, id: number) {
+    return this.request.get(`/users/${id}`, { headers: auth(token) });
+  }
+
+  updateUser(token: string | null, id: number, data: unknown) {
+    return this.request.put(`/users/${id}`, { headers: auth(token), data });
+  }
+
+  deleteUser(token: string | null, id: number) {
+    return this.request.delete(`/users/${id}`, { headers: auth(token) });
   }
 
   /** Idempotente: funciona no H2 vazio e no PostgreSQL já populado. */

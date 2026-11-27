@@ -17,7 +17,8 @@
 **Entrada:** história e critérios disponíveis, ambiente saudável, massa sintética pronta.
 **Suspensão:** ambiente instável ou defeito que impede o fluxo principal.
 **Saída:** checklist executado, nenhum teste `@critical` falhando, nenhum defeito Alto aberto, riscos restantes declarados.
-**Defeitos:** Jira. **Histórico:** `test-runs/`. **Aprovação:** responsável pelo QA.
+**Casos:** `test-catalog.md` (gerado do código, por tipo) e `features/`. **Gestão:** Qase, espelho do repositório.
+**Defeitos:** Qase, citando a história do Jira. **Histórico:** `test-runs/`. **Aprovação:** responsável pelo QA.
 
 ## Estratégia de trabalho
 - Uma história por vez: critérios → checklist → API → UI → execução → veredito.

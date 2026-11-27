@@ -1,7 +1,7 @@
 # Git workflow
 
 - `main`: estável. `develop`: integração. Trabalho em branch curta a partir de `develop`; PR para `develop`; depois `develop` → `main`.
-- Organização GitHub: `clinix-org` (repositórios públicos, acesso por times). Repositório de testes: `clinix-qa`, ainda não criado em 2026-11-23.
+- Organização GitHub: `clinix-org` (repositórios públicos, acesso por times). Repositório de testes: `clinix-qa` (criado em 2026-11-24).
 - Backend e frontend: toda PR precisa da revisão e aceite de **outro** membro do time.
 - `clinix-qa`: PR sem revisor obrigatório; o responsável pelo QA faz o merge.
 - O agente nunca aprova nem faz merge, e não contorna proteção de branch.
@@ -55,11 +55,28 @@ O agente nunca marca a caixa de revisão humana nem declara que houve revisão.
 
 ## Pre-commit checklist
 - [ ] Definition of Done do `CLAUDE.md`
+- [ ] Branch conferida **no mesmo comando** do commit: `test "$(git branch --show-current)" = <branch> && git commit ...` (em 2026-11-27 o editor trocou a branch no meio da tarefa e o commit caiu na `develop` local)
 - [ ] `git status` e diff staged lidos por completo
 - [ ] Nenhum `.env`, token, relatório, trace ou PDF da ISO
 - [ ] Somente arquivos da tarefa (nunca `git add .`)
 
-## Authorization request (mostrar e esperar)
+Proteção local: o hook `.git/hooks/pre-commit` (fora do versionamento, instalado em cada clone) recusa commit em `develop`, `main` e `results`.
+
+## Push e PR sem OK (clinix-qa, regra 1)
+1. Checklist acima completo; diff da branch contra `origin/develop` lido por completo.
+2. Varredura local de segredos: o mesmo comando do passo "Procurar segredos" de `.github/workflows/quality.yml` (mesma imagem fixada por digest; sem dependência nova). Achado → parar e avisar; nada é enviado.
+3. `git push -u origin <branch>` só da branch de trabalho; PR só para `develop`, com o modelo abaixo.
+4. No relatório: link da PR, arquivos, validação e pendências. A CI obrigatória (`check` e `smoke / test`) e o merge ficam com o responsável.
+
+## Rotina pós-merge (sem OK, após o aviso do responsável)
+1. `gh pr view <n>`: PR `MERGED` na base esperada e CI verde.
+2. `git fetch --prune`; árvore limpa; trocar para `develop`; `git pull --ff-only`.
+3. Conferir que o conteúdo é o da PR (`git diff --quiet <último commit da PR> HEAD`, ou o diff só com o que outras PRs trouxeram).
+4. Qualquer divergência (CI vermelha, pull que não é fast-forward, alteração local, conteúdo diferente) → parar e avisar.
+5. Não excluir branch; só sinalizar a branch remota que sobrou. Merge em `develop` não atualiza `main`.
+Vale só para o clinix-qa; backend e frontend só com autorização.
+
+## Authorization request (ações que ainda exigem OK: mostrar e esperar)
 ```text
 Ação: commit | push | pull | PR
 Repositório/branch: <nome> → <destino>

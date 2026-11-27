@@ -10,7 +10,7 @@ Risco: Alto | Base: critérios da SCRUM-1 e respostas do responsável em 2026-11
 | [x] | Deve exibir "Entrando" quando a validação está em andamento | Estados | UI | regression/noturno |
 | [x] | Deve abrir o dashboard quando as credenciais são válidas | Partição | UI | smoke/PR |
 | [x] | Deve exibir erro e permanecer no login quando: a senha está incorreta; o e-mail não está cadastrado; o e-mail tem só o primeiro nome | Partição | UI (3) | regression/noturno |
-| [ ] | Deve exibir mensagem e permanecer no login quando o usuário está inativo | Estados | UI | regression/noturno — **falha** |
+| [ ] | Deve informar que a conta está inativa e permanecer no login quando o usuário está inativo | Estados | UI | regression/noturno — **falha** |
 | [x] | Deve retornar token aceito em /auth/me quando as credenciais são válidas | Partição | API | smoke/PR |
 | [x] | Deve recusar com a mesma mensagem quando: a senha está incorreta; o e-mail não está cadastrado | Partição | API (2) | regression/noturno |
 | [x] | Deve recusar o acesso quando a senha tem 5 ou 7 dígitos | Limite | API (2) | regression/noturno |
@@ -19,5 +19,6 @@ Risco: Alto | Base: critérios da SCRUM-1 e respostas do responsável em 2026-11
 
 Fora do escopo: cadastro, recuperação de senha e auditoria (história); carga (k6, depois).
 Exploratório: não realizado.
-Riscos restantes / dúvidas: mensagem do usuário inativo; senha com mais de 6 caracteres na tela; tecla Enter; Firefox e WebKit.
+Ajuste em 2026-11-27: o teste de UI do inativo passou a exigir que a mensagem fale em conta inativa (`/inativ/i`). Desde o frontend `164fde0` (PR #8), a tela mostra "Não foi possível entrar agora. Tente novamente." para todo erro diferente de 401, e o teste antigo, que só exigia um alerta visível, passava sem o defeito estar corrigido. Prova: reprova com a mensagem genérica e passa numa cópia do frontend com a mensagem de conta inativa.
+Riscos restantes / dúvidas: mensagem do usuário inativo (sugestão do QA, a confirmar: API 423 `ACCOUNT_LOCKED`; tela "Sua conta está inativa. Procure o administrador do sistema para reativá-la."); senha com mais de 6 caracteres na tela; tecla Enter; Firefox e WebKit.
 Veredito: BLOQUEADO — 2026-11-25, backend `a86f0b5`, frontend `53158c9`; ver `../test-runs/2026-11-25-scrum-1-login.md`

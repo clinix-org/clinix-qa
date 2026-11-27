@@ -7,6 +7,8 @@
   <img src="https://raw.githubusercontent.com/clinix-org/clinix-qa/results/results.svg" alt="Resultados mais recentes dos testes de API, interface web e desempenho" width="100%">
 </a>
 
+Falhas aparecem no cartão: **NOVA** pede investigação imediata; as marcadas com o defeito (ex.: `Qase CLINIX-1`) já estão registradas e aguardam correção. Detalhes no resumo de cada [execução da regressão](https://github.com/clinix-org/clinix-qa/actions/workflows/regression.yml).
+
 ## Executar localmente
 
 **Pré-requisitos:** Git, Docker e Node.js 26. No Windows, use o WSL ou o Git Bash.

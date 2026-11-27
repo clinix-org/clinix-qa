@@ -73,14 +73,9 @@ const failures = tests
   }));
 // Falha nova primeiro: é a que pede ação imediata.
 failures.sort((a, b) => Number(Boolean(a.defect)) - Number(Boolean(b.defect)));
-const newFailures = failures.filter((f) => !f.defect).length;
 // Marcado como defeito e aprovado: o defeito pode ter sido corrigido; a marcação deve sair.
 const fixed = tests.filter((t) => t.defect && t.result === 'passed');
-const verdict = ok
-  ? 'Aprovado'
-  : newFailures
-    ? 'Reprovado · falha nova'
-    : 'Reprovado · defeito conhecido';
+const verdict = ok ? 'Aprovado' : 'Reprovado';
 const failureNote = (f) => (f.defect ? `defeito conhecido: ${f.defect}` : 'NOVA');
 
 if (mode === 'summary') {
@@ -179,7 +174,7 @@ text{font:14px -apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
 </style>
 <rect x=".5" y=".5" width="899" height="${height - 1}" rx="10" class="bg"/>
 ${text(24, 42, `${sum.passed} de ${sum.total} testes aprovados`, 'title', 'start')}
-${text(876, 42, `● ${verdict}`, `b ${ok ? 'good' : newFailures ? 'bad' : 'warn'}`, 'end')}
+${text(876, 42, `● ${verdict}`, `b ${ok ? 'good' : 'bad'}`, 'end')}
 <rect x="24" y="60" width="852" height="8" rx="4" class="${sum.total ? 'track' : 'none'}"/>
 <rect x="24" y="60" width="${barWidth.toFixed(1)}" height="8" rx="4" class="good"/>
 ${text(24, 108, 'Tipo', 'head', 'start')}${columns.map(([, label, x]) => text(x, 108, label, 'head')).join('')}${text(840, 108, 'Sucesso', 'head')}

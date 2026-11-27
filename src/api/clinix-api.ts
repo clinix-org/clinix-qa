@@ -38,6 +38,11 @@ export class ClinixApi {
     return this.request.get('/medications', { headers: auth(token), params: { search } });
   }
 
+  /** GET /medications com qualquer combinação de parâmetros de busca, página e ordenação. */
+  listMedicationPage(token: string | null, params: Record<string, string | number> = {}) {
+    return this.request.get('/medications', { headers: auth(token), params });
+  }
+
   medicationOptions(token: string) {
     return this.request.get('/medications/options', { headers: auth(token) });
   }

@@ -1,6 +1,7 @@
 import { test as base, type APIResponse } from '@playwright/test';
 import { ClinixApi } from '../api/clinix-api.ts';
 import { env } from '../config/env.ts';
+import type { MedicationPayload } from '../data/medications.ts';
 import { getUser, type UserKey } from '../data/users.ts';
 import { LoginPage } from '../pages/login-page.ts';
 import { MedicationsPage } from '../pages/medications-page.ts';
@@ -10,6 +11,8 @@ type Medications = {
   userToken: string;
   /** POST cru; o ID de todo cadastro com 201 é removido ao final do teste. */
   create: (token: string | null, data: unknown) => Promise<APIResponse>;
+  /** Cadastra em sequência (a ordem de criação fica previsível) e devolve os IDs na mesma ordem. */
+  seed: (payloads: MedicationPayload[]) => Promise<number[]>;
   /** Quantos cadastros existem com este nome exato (leitura como ADMIN). */
   countByName: (name: string) => Promise<number>;
   /** Para cadastros feitos pela tela: ao final, remove todos com este nome exato. */
@@ -61,13 +64,26 @@ export const test = base.extend<Fixtures>({
       return page.content.filter((m) => m.medicationName === name).map((m) => m.id);
     };
 
+    const create = async (token: string | null, data: unknown) => {
+      const response = await api.createMedication(token, data);
+      if (response.status() === 201) created.push(((await response.json()) as { id: number }).id);
+      return response;
+    };
+
     await use({
       adminToken,
       userToken,
-      create: async (token, data) => {
-        const response = await api.createMedication(token, data);
-        if (response.status() === 201) created.push(((await response.json()) as { id: number }).id);
-        return response;
+      create,
+      seed: async (payloads) => {
+        const ids: number[] = [];
+        for (const payload of payloads) {
+          const response = await create(adminToken, payload);
+          if (response.status() !== 201) {
+            throw new Error(`Massa de medicamentos falhou: HTTP ${response.status()}`);
+          }
+          ids.push(((await response.json()) as { id: number }).id);
+        }
+        return ids;
       },
       countByName: async (name) => (await findIds(name)).length,
       cleanupByName: (name) => {

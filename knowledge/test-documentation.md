@@ -25,6 +25,7 @@ O catálogo lê o cabeçalho de cada script em `performance/` (pastas `lib/` sã
 - A identidade do caso é o título, como no código. IDs do Qase não entram no código nem nos títulos.
 - Execução: uma por registro em `test-runs/`, com o mesmo nome do arquivo e os SHAs testados; resultados copiados da execução real, nunca de leitura de código.
 - Em 2026-11-27, `qase_ci_report` com `defect: true` respondeu sucesso, mas não gravou os resultados (a execução ficou aberta e "untested"). Não usar `defect: true`; citar o defeito no `comment` e reler a execução após gravar.
+- Ainda em 2026-11-27, com `qase_result_record`, a releitura imediata da execução mostrou "untested" e, segundos depois, os resultados certos: a leitura do Qase atrasa. Reler depois de alguns segundos antes de concluir que não gravou; não regravar (duplica o resultado). Concluir a execução (`qase_run_complete`) só depois de ver os resultados.
 - Limites do Free vistos em 2026-11-26: sem busca QQL (ler com `qase_get`); a API não liga defeito a resultado existente (citar os títulos dos testes no defeito); resultado individual não é relido sem o hash (o detalhe fica em `test-runs/`).
 - Exclusões no Qase e o acesso direto `qase_api` ficam bloqueados nas permissões do usuário do Claude Code.
 - Cópia local: após cada sincronização, exportar o projeto do Qase em JSON para `/mnt/NAS/qa/clinix/qase-backup/AAAA-MM-DD/`, fora do repositório (defeitos não vão para o repositório público).

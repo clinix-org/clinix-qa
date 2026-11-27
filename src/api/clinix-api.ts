@@ -9,6 +9,9 @@ export type UserPayload = {
 };
 type UserRecord = Omit<UserPayload, 'senha'> & { id: number };
 
+const auth = (token: string | null): Record<string, string> =>
+  token ? { Authorization: `Bearer ${token}` } : {};
+
 /** Cliente fino: devolve a resposta crua; asserções ficam nos testes. */
 export class ClinixApi {
   constructor(private readonly request: APIRequestContext) {}
@@ -21,6 +24,30 @@ export class ClinixApi {
     const response = await this.login(username, password);
     if (!response.ok()) throw new Error(`Login de preparação falhou: HTTP ${response.status()}`);
     return ((await response.json()) as { token: string }).token;
+  }
+
+  createMedication(token: string | null, data: unknown) {
+    return this.request.post('/medications', { headers: auth(token), data });
+  }
+
+  getMedication(token: string, id: number) {
+    return this.request.get(`/medications/${id}`, { headers: auth(token) });
+  }
+
+  listMedications(token: string, search: string) {
+    return this.request.get('/medications', { headers: auth(token), params: { search } });
+  }
+
+  medicationOptions(token: string) {
+    return this.request.get('/medications/options', { headers: auth(token) });
+  }
+
+  /** Limpeza de massa; usado pela fixture, não é comportamento testado (sem história). */
+  async deleteMedication(token: string, id: number): Promise<void> {
+    const response = await this.request.delete(`/medications/${id}`, { headers: auth(token) });
+    if (![204, 404].includes(response.status())) {
+      throw new Error(`Limpeza do medicamento ${id} falhou: HTTP ${response.status()}`);
+    }
   }
 
   /** Idempotente: funciona no H2 vazio e no PostgreSQL já populado. */

@@ -5,10 +5,10 @@
 
 | Tipo | Casos | Smoke (PR) | Críticos |
 |---|---|---|---|
-| API | 84 | 10 | 35 |
+| API | 86 | 10 | 37 |
 | Interface web (UI) | 48 | 8 | 18 |
 | Desempenho (k6) | 0 | 0 | 0 |
-| **Total** | **132** | **18** | **53** |
+| **Total** | **134** | **18** | **55** |
 
 ## API
 
@@ -87,6 +87,8 @@
 | usuário inativo | deve recusar sem alterar quando o ADMIN tenta tornar a si mesmo inativo | regressão | sim | [update-user.spec.ts:113](../tests/api/users/update-user.spec.ts#L113) |
 | acesso à edição | deve recusar com 403 sem alterar quando o USER tenta editar | regressão | sim | [update-user.spec.ts:155](../tests/api/users/update-user.spec.ts#L155) |
 | acesso à edição | deve recusar com 401 sem alterar quando não há token | regressão | sim | [update-user.spec.ts:155](../tests/api/users/update-user.spec.ts#L155) |
+| log do sistema | deve registrar a ação com data, hora e o ADMIN responsável quando o ADMIN edita um usuário | regressão | sim | [user-audit-log.spec.ts:44](../tests/api/users/user-audit-log.spec.ts#L44) |
+| log do sistema | deve registrar a ação com data, hora e o ADMIN responsável quando o ADMIN exclui um usuário | regressão | sim | [user-audit-log.spec.ts:44](../tests/api/users/user-audit-log.spec.ts#L44) |
 
 ### Login — SCRUM-1
 

@@ -5,10 +5,10 @@
 
 | Tipo | Casos | Smoke (PR) | Críticos |
 |---|---|---|---|
-| API | 30 | 4 | 13 |
-| Interface web (UI) | 23 | 5 | 9 |
+| API | 49 | 5 | 13 |
+| Interface web (UI) | 31 | 6 | 9 |
 | Desempenho (k6) | 0 | 0 | 0 |
-| **Total** | **53** | **9** | **22** |
+| **Total** | **80** | **11** | **22** |
 
 ## API
 
@@ -51,6 +51,30 @@
 | campos obrigatórios | deve indicar o campo obrigatório quando falta a senha | regressão |  | [login.spec.ts:72](../tests/api/auth/login.spec.ts#L72) |
 | usuário inativo | deve recusar com conta inativa e sem token quando o usuário está inativo | regressão | sim | [login.spec.ts:88](../tests/api/auth/login.spec.ts#L88) |
 
+### Paginação de medicamentos — SCRUM-33
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| páginas e totais | deve devolver 2 itens, total 5, 3 páginas e não ser a última quando a primeira página tem tamanho 2 | smoke + regressão |  | [list-medications.spec.ts:36](../tests/api/medications/list-medications.spec.ts#L36) |
+| páginas e totais | deve devolver o item restante e indicar a última página quando a página 2 de tamanho 2 é pedida | regressão |  | [list-medications.spec.ts:62](../tests/api/medications/list-medications.spec.ts#L62) |
+| páginas e totais | deve devolver 200 com lista vazia quando a página pedida passa da última | regressão |  | [list-medications.spec.ts:82](../tests/api/medications/list-medications.spec.ts#L82) |
+| páginas e totais | deve usar a página 0 e 10 itens por página quando nenhum parâmetro é enviado | regressão |  | [list-medications.spec.ts:101](../tests/api/medications/list-medications.spec.ts#L101) |
+| páginas e totais | deve aceitar a listagem quando o tamanho da página é 1 | regressão |  | [list-medications.spec.ts:115](../tests/api/medications/list-medications.spec.ts#L115) |
+| páginas e totais | deve aceitar a listagem quando o tamanho da página é 100 | regressão |  | [list-medications.spec.ts:115](../tests/api/medications/list-medications.spec.ts#L115) |
+| ordem entre páginas | deve seguir a ordem alfabética do nome em todas as páginas quando a ordenação é a padrão | regressão |  | [list-medications.spec.ts:142](../tests/api/medications/list-medications.spec.ts#L142) |
+| ordem entre páginas | deve listar cada medicamento uma única vez quando nomes iguais se espalham por várias páginas | regressão |  | [list-medications.spec.ts:158](../tests/api/medications/list-medications.spec.ts#L158) |
+| busca | deve contar só os medicamentos da busca quando o termo tem outra caixa e espaços extras | regressão |  | [list-medications.spec.ts:181](../tests/api/medications/list-medications.spec.ts#L181) |
+| busca | deve tratar "%" como texto quando aparece no termo da busca | regressão |  | [list-medications.spec.ts:203](../tests/api/medications/list-medications.spec.ts#L203) |
+| busca | deve tratar "_" como texto quando aparece no termo da busca | regressão |  | [list-medications.spec.ts:203](../tests/api/medications/list-medications.spec.ts#L203) |
+| parâmetros inválidos | deve recusar com 400 e "Paginação inválida. Use páginas de 1 a 100 itens." quando a página é negativa | regressão |  | [list-medications.spec.ts:256](../tests/api/medications/list-medications.spec.ts#L256) |
+| parâmetros inválidos | deve recusar com 400 e "Paginação inválida. Use páginas de 1 a 100 itens." quando o tamanho da página é 0 | regressão |  | [list-medications.spec.ts:256](../tests/api/medications/list-medications.spec.ts#L256) |
+| parâmetros inválidos | deve recusar com 400 e "Paginação inválida. Use páginas de 1 a 100 itens." quando o tamanho da página é 101 | regressão |  | [list-medications.spec.ts:256](../tests/api/medications/list-medications.spec.ts#L256) |
+| parâmetros inválidos | deve recusar com 400 e "Ordenação inválida." quando o campo de ordenação não é permitido | regressão |  | [list-medications.spec.ts:256](../tests/api/medications/list-medications.spec.ts#L256) |
+| parâmetros inválidos | deve recusar com 400 e "Ordenação inválida." quando a direção da ordenação não é asc nem desc | regressão |  | [list-medications.spec.ts:256](../tests/api/medications/list-medications.spec.ts#L256) |
+| parâmetros inválidos | deve recusar com 400 e "Confira o formato dos dados informados." quando a página não é numérica | regressão |  | [list-medications.spec.ts:256](../tests/api/medications/list-medications.spec.ts#L256) |
+| parâmetros inválidos | deve recusar com 400 e "Confira o formato dos dados informados." quando o tamanho da página é decimal | regressão |  | [list-medications.spec.ts:256](../tests/api/medications/list-medications.spec.ts#L256) |
+| acesso | deve recusar com 401 quando a listagem é pedida sem token | regressão |  | [list-medications.spec.ts:274](../tests/api/medications/list-medications.spec.ts#L274) |
+
 ### Ambiente
 
 | Grupo | Caso | Suíte | Crítico | Código |
@@ -90,6 +114,19 @@
 | credenciais inválidas | deve exibir erro e permanecer no login quando o e-mail não está cadastrado | regressão | sim | [login.spec.ts:117](../tests/e2e/auth/login.spec.ts#L117) |
 | credenciais inválidas | deve exibir erro e permanecer no login quando o e-mail tem só o primeiro nome | regressão | sim | [login.spec.ts:117](../tests/e2e/auth/login.spec.ts#L117) |
 | usuário inativo | deve exibir mensagem e permanecer no login quando o usuário está inativo | regressão | sim | [login.spec.ts:136](../tests/e2e/auth/login.spec.ts#L136) |
+
+### Paginação de medicamentos — SCRUM-33
+
+| Grupo | Caso | Suíte | Crítico | Código |
+|---|---|---|---|---|
+| navegação | deve mostrar 10 medicamentos, o total e a página 1 destacada quando a lista abre com 12 resultados | smoke + regressão |  | [list-medications.spec.ts:16](../tests/e2e/medications/list-medications.spec.ts#L16) |
+| navegação | deve mostrar a página seguinte e voltar à anterior quando uso Próxima e Anterior | regressão |  | [list-medications.spec.ts:32](../tests/e2e/medications/list-medications.spec.ts#L32) |
+| navegação | deve desabilitar Anterior na primeira página e Próxima na última quando há 2 páginas | regressão |  | [list-medications.spec.ts:53](../tests/e2e/medications/list-medications.spec.ts#L53) |
+| navegação | deve ir à página clicada e mostrar só a primeira, a vizinha e a última quando há 5 páginas | regressão |  | [list-medications.spec.ts:73](../tests/e2e/medications/list-medications.spec.ts#L73) |
+| mudança de filtro | deve voltar à página 1 e mostrar os 12 itens quando mudo para 20 itens por página | regressão |  | [list-medications.spec.ts:104](../tests/e2e/medications/list-medications.spec.ts#L104) |
+| mudança de filtro | deve voltar à página 1 e atualizar o total quando a busca muda estando na página 2 | regressão |  | [list-medications.spec.ts:121](../tests/e2e/medications/list-medications.spec.ts#L121) |
+| estados da lista | deve mostrar "Nenhum medicamento encontrado.", 0 resultados e a navegação desabilitada quando a busca não encontra nada | regressão |  | [list-medications.spec.ts:149](../tests/e2e/medications/list-medications.spec.ts#L149) |
+| estados da lista | deve mostrar a mensagem de erro da API quando a listagem falha | regressão |  | [list-medications.spec.ts:161](../tests/e2e/medications/list-medications.spec.ts#L161) |
 
 ### Ambiente
 

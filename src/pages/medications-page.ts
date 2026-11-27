@@ -16,6 +16,15 @@ export class MedicationsPage {
   readonly submit;
   readonly successMessage;
   readonly duplicateMessage;
+  readonly search;
+  readonly rowNames;
+  readonly emptyState;
+  readonly listError;
+  readonly pagination;
+  readonly itemsPerPage;
+  readonly totalCount;
+  readonly previousPage;
+  readonly nextPage;
 
   constructor(private readonly page: Page) {
     // data-state indica quando a lista terminou de carregar (sem papel ARIA equivalente).
@@ -35,6 +44,29 @@ export class MedicationsPage {
     // O texto do toast é dividido em vários elementos; o test id o reúne.
     this.successMessage = page.getByTestId('medications-success-toast-message');
     this.duplicateMessage = page.getByTestId('medications-duplicate-toast-message');
+    this.search = page.getByRole('searchbox', {
+      name: 'Pesquisar por código, categoria ou descrição',
+    });
+    // Nome comercial de cada linha, na ordem exibida (a célula também traz a composição).
+    this.rowNames = page.getByTestId('medications-cell-name');
+    this.emptyState = page.getByText('Nenhum medicamento encontrado.');
+    this.listError = page.getByTestId('medications-list-error');
+    this.pagination = page.getByTestId('medications-pagination');
+    this.itemsPerPage = this.pagination.getByRole('combobox');
+    this.totalCount = page.getByTestId('medications-total-count');
+    // Botões só com ícone, sem nome acessível: test id é o único seletor estável.
+    this.previousPage = page.getByTestId('medications-previous-page');
+    this.nextPage = page.getByTestId('medications-next-page');
+  }
+
+  numberButton(pageNumber: number) {
+    return this.pagination.getByRole('button', { name: String(pageNumber), exact: true });
+  }
+
+  /** Abre a lista já filtrada: isola a massa do teste dos demais cadastros do banco. */
+  async openFiltered(term: string) {
+    await this.open();
+    await this.search.fill(term);
   }
 
   async open() {

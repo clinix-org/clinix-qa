@@ -72,6 +72,7 @@ jobs:
           BACKEND_SHA=$(git -C ../clinix-backend rev-parse --short HEAD) \
           FRONTEND_SHA=$(git -C ../clinix-frontend rev-parse --short HEAD) \
           QA_SHA=$(git rev-parse --short HEAD) \
+          RUN_ID=${{ github.run_id }} \
           node scripts/results.mjs card card
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

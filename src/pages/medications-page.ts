@@ -20,7 +20,8 @@ export class MedicationsPage {
   constructor(private readonly page: Page) {
     // data-state indica quando a lista terminou de carregar (sem papel ARIA equivalente).
     this.table = page.getByTestId('medications-table');
-    this.createButton = page.getByRole('button', { name: 'Novo Medicamento' });
+    // exact: texto da história; o botão decorativo antigo ("Novo medicamento") não pode passar.
+    this.createButton = page.getByRole('button', { name: 'Novo Medicamento', exact: true });
     this.dialog = page.getByRole('dialog', { name: 'Novo medicamento' });
     this.name = this.dialog.getByLabel('Nome do medicamento');
     // Âncora: "Adicionar princípio ativo" (botão) também contém o texto.

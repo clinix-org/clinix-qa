@@ -29,6 +29,8 @@ Exploratório: a fazer — vários princípios ativos (até 30), dosagem com ví
 Observações (baixa severidade, fora dos critérios):
 - O 401 sem token não traz `requestId`, e o texto diz "Sessão expirada ou inválido." (concordância). Já existia antes da SCRUM-21.
 - `createdAt` do POST tem nanossegundos; o valor persistido no PostgreSQL tem microssegundos. O instante coincide em milissegundos.
+- Rota inexistente na API devolve 500 `INTERNAL_ERROR` em vez de 404 (visto na CI contra a `develop` e na branch da história). Já existia antes da SCRUM-21.
+- A `develop` do frontend tem um botão decorativo "Novo medicamento", visível a todos e sem ação. O teste exige o texto exato da história para não aceitá-lo.
 Riscos restantes / dúvidas (para o PO):
 - Duplicidade: a história usa nome + dosagem + unidade; o código também compara o **nome do princípio ativo** (mesmo nome comercial, 500 mg, princípio ativo diferente = permitido). Qual vale?
 - Composição: a história tem um princípio ativo; o código aceita de 1 a 30, cada um com dosagem e unidade.

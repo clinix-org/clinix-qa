@@ -18,7 +18,7 @@ A suíte completa passou 3 vezes seguidas com o mesmo resultado (79/80) no Postg
 Falha na suíte completa e no H2: "deve recusar com conta inativa e sem token quando o usuário está inativo" (API: 500 em vez de 423; defeito já aberto, SCRUM-1).
 Checklist: `../features/medications-pagination.md` | Catálogo: `../test-catalog.md`
 Defeitos (Qase): nenhum novo
-Qase: não sincronizado (aguarda revisão dos testes com PO e DEV e OK)
+Qase: suítes `API › Paginação de medicamentos` (19 casos) e `UI › Paginação de medicamentos` (8 casos); execuções "2026-11-27 — SCRUM-33 Paginação de medicamentos — API local" (19/19) e "— UI local" (8/8), registradas em 2026-11-27
 Não testado e por quê: UI em H2 (a tela 8091 usa o backend do container, em PostgreSQL); estado "carregando"; exploratório; Firefox/WebKit; carga (k6, só a pedido)
 Riscos restantes: critérios derivados do código; 5 dúvidas para o PO (busca por código/categoria/descrição, ordem da lista, quantidades por página, página inexistente, página no endereço)
 Evidência: execução local, `npx playwright test --project=api`, `API_URL=<API em H2> npx playwright test --project=api` e `BASE_URL=http://localhost:8091 npx playwright test`

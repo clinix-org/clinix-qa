@@ -17,12 +17,14 @@ O catálogo lê o cabeçalho de cada script em `performance/` (pastas `lib/` sã
 ```
 
 ## Qase (gestão de testes)
-- O repositório é a fonte; o Qase é um espelho para consulta e gestão. Plano Free: histórico de 30 dias, por isso o histórico oficial continua em `docs/test-runs/`.
+- O repositório é a fonte; o Qase é um espelho para consulta e gestão. O histórico oficial continua em `docs/test-runs/`.
+- Limites do Free (docs oficiais, lidos em 2026-11-27): resultados de execução, **defeitos** e histórico de alterações ficam acessíveis por 30 dias; casos e suítes não expiram. 500 MB de armazenamento, 2 projetos, 2 execuções ativas, 5.000 resultados por mês via API, 150 requisições por minuto.
+- Sincronização (autorizada pelo responsável em 2026-11-27, sem pedir OK a cada lote): ao concluir testes de uma história e ao alterar um teste que falhava ou estava bloqueado, atualizar casos, execução e o defeito afetado. Antes, comparar os títulos do catálogo com os casos do Qase e recriar o que faltar. Depois, exportar a cópia local. Exclusão e defeito novo continuam exigindo OK.
 - Acesso pelo MCP oficial (`@qase/mcp-server`), com o token configurado no escopo do usuário do Claude Code, fora do repositório. O token nunca entra em arquivo do projeto, log ou diff.
 - Estrutura: suíte = tipo › funcionalidade (`API › Login`, `UI › Login`, `Desempenho › Login`). Caso = o mesmo título do código; descrição com o grupo e o caminho do arquivo; tags com a história (`SCRUM-1`), `smoke` e `critical`; marcado como automatizado.
 - A identidade do caso é o título, como no código. IDs do Qase não entram no código nem nos títulos.
 - Execução: uma por registro em `test-runs/`, com o mesmo nome do arquivo e os SHAs testados; resultados copiados da execução real, nunca de leitura de código.
-- Toda escrita no Qase (casos, execuções, defeitos) é publicação: mostrar a lista e esperar OK. Um OK vale para um lote.
+- Em 2026-11-27, `qase_ci_report` com `defect: true` respondeu sucesso, mas não gravou os resultados (a execução ficou aberta e "untested"). Não usar `defect: true`; citar o defeito no `comment` e reler a execução após gravar.
 - Limites do Free vistos em 2026-11-26: sem busca QQL (ler com `qase_get`); a API não liga defeito a resultado existente (citar os títulos dos testes no defeito); resultado individual não é relido sem o hash (o detalhe fica em `test-runs/`).
 - Exclusões no Qase e o acesso direto `qase_api` ficam bloqueados nas permissões do usuário do Claude Code.
 - Cópia local: após cada sincronização, exportar o projeto do Qase em JSON para `/mnt/NAS/qa/clinix/qase-backup/AAAA-MM-DD/`, fora do repositório (defeitos não vão para o repositório público).

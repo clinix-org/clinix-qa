@@ -1,0 +1,58 @@
+{
+  "when": "2026-11-28T15:04:16.378Z",
+  "ok": false,
+  "verdict": "Reprovado",
+  "total": {
+    "total": 134,
+    "passed": 131,
+    "failed": 3,
+    "error": 0,
+    "blocked": 0
+  },
+  "types": [
+    {
+      "label": "API",
+      "total": 86,
+      "passed": 85,
+      "failed": 1,
+      "error": 0,
+      "blocked": 0
+    },
+    {
+      "label": "Interface web (UI)",
+      "total": 48,
+      "passed": 46,
+      "failed": 2,
+      "error": 0,
+      "blocked": 0
+    }
+  ],
+  "failures": [
+    {
+      "type": "API",
+      "title": "deve recusar com conta inativa e sem token quando o usuário está inativo",
+      "path": "Login › usuário inativo › deve recusar com conta inativa e sem token quando o usuário está inativo",
+      "result": "failed",
+      "defect": "Qase CLINIX-1"
+    },
+    {
+      "type": "UI",
+      "title": "deve informar que a conta está inativa e permanecer no login quando o usuário está inativo",
+      "path": "Login › usuário inativo › deve informar que a conta está inativa e permanecer no login quando o usuário está inativo",
+      "result": "failed",
+      "defect": "Qase CLINIX-1"
+    },
+    {
+      "type": "UI",
+      "title": "deve informar que o e-mail já está cadastrado quando o ADMIN usa um e-mail existente",
+      "path": "Cadastro de usuários › formulário › deve informar que o e-mail já está cadastrado quando o ADMIN usa um e-mail existente",
+      "result": "failed",
+      "defect": "Qase CLINIX-7"
+    }
+  ],
+  "database": "PostgreSQL 18 · Chromium",
+  "backend": "7522778",
+  "frontend": "ef2ad24",
+  "qa": "07b1458",
+  "run": "46157664742"
+}
